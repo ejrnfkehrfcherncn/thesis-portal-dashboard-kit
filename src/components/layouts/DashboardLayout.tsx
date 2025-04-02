@@ -85,6 +85,24 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     .toUpperCase()
     .substring(0, 2);
 
+  // Helper function to get display-friendly role text
+  const getRoleDisplay = () => {
+    if (!user.authorities || user.authorities.length === 0) {
+      return "Користувач";
+    }
+
+    // Map role values to more friendly display texts
+    const roleMap: Record<UserRole, string> = {
+      "ROLE_STUDENT": "Студент",
+      "ROLE_SUPERVISOR": "Викладач",
+      "ROLE_DEPARTMENTHEAD": "Зав. кафедри",
+      "ROLE_ADMIN": "Адміністратор"
+    };
+
+    // Return the first role's display text
+    return roleMap[user.authorities[0]] || "Користувач";
+  };
+
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Desktop sidebar */}
@@ -137,7 +155,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                       {user.name}
                     </p>
                     <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
-                      {user.role}
+                      {getRoleDisplay()}
                     </p>
                   </div>
                 </div>
@@ -217,7 +235,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                       {user.name}
                     </p>
                     <p className="text-xs font-medium text-gray-500">
-                      {user.role}
+                      {getRoleDisplay()}
                     </p>
                   </div>
                 </div>
