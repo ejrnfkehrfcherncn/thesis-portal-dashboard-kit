@@ -19,13 +19,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 // Get navigation items based on user authorities
-const getNavigation = (authorities: UserRole[]) => {
+const getNavigation = (authorities: UserRole[] | undefined) => {
   const common = [
     { name: "Головна", href: "/dashboard", icon: Home },
     { name: "Профіль", href: "/profile", icon: User },
   ];
 
   let roleSpecificItems: Array<{ name: string; href: string; icon: any }> = [];
+
+  // Add null check for authorities
+  if (!authorities) {
+    return common;
+  }
 
   if (authorities.includes("ROLE_STUDENT")) {
     roleSpecificItems = [
