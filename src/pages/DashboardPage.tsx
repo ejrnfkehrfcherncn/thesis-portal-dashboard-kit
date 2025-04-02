@@ -1,3 +1,4 @@
+
 import { useAuth } from "@/contexts/AuthContext";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +10,11 @@ const DashboardPage = () => {
   if (!user) return null;
 
   const getWelcomeMessage = () => {
+    // Add null/undefined check for user.authorities
+    if (!user.authorities) {
+      return "Вітаємо у системі управління бакалаврськими темами!";
+    }
+
     if (user.authorities.includes("ROLE_STUDENT")) {
       return "Вітаємо у системі управління бакалаврськими темами! Тут ви можете переглянути доступні теми та обрати собі тему для бакалаврської роботи.";
     }
@@ -18,7 +24,7 @@ const DashboardPage = () => {
     }
     
     if (user.authorities.includes("ROLE_DEPARTMENTHEAD")) {
-      return "Вітаємо у системі управління бакалаврськими темами! Тут ви можете переглядати та керувати всіма те��ами та викладачами вашого відділення.";
+      return "Вітаємо у системі управління бакалаврськими темами! Тут ви можете переглядати та керувати всіма темами та викладачами вашого відділення.";
     }
     
     if (user.authorities.includes("ROLE_ADMIN")) {
@@ -31,79 +37,82 @@ const DashboardPage = () => {
   const getDashboardCards = () => {
     let cards = [];
     
-    if (user.authorities.includes("ROLE_STUDENT")) {
-      cards.push(
-        <DashboardCard
-          key="theses"
-          title="Доступні теми"
-          description="Перегляньте доступні бакалаврські теми"
-          icon={<BookOpen className="h-6 w-6" />}
-          count={42}
-          linkTo="/theses"
-        />
-      );
-    }
-    
-    if (user.authorities.includes("ROLE_SUPERVISOR")) {
-      cards.push(
-        <DashboardCard
-          key="my-theses"
-          title="Мої теми"
-          description="Керуйте темами, які ви запропонували"
-          icon={<BookOpen className="h-6 w-6" />}
-          count={7}
-          linkTo="/my-theses"
-        />,
-        <DashboardCard
-          key="students"
-          title="Мої студенти"
-          description="Перегляньте своїх студентів"
-          icon={<Users className="h-6 w-6" />}
-          count={12}
-          linkTo="/students"
-        />
-      );
-    }
-    
-    if (user.authorities.includes("ROLE_DEPARTMENTHEAD")) {
-      cards.push(
-        <DashboardCard
-          key="all-theses"
-          title="Усі теми"
-          description="Перегляньте та керуйте всіма темами"
-          icon={<BookOpen className="h-6 w-6" />}
-          count={128}
-          linkTo="/all-theses"
-        />,
-        <DashboardCard
-          key="supervisors"
-          title="Викладачі"
-          description="Керуйте викладачами відділення"
-          icon={<Users className="h-6 w-6" />}
-          count={23}
-          linkTo="/supervisors"
-        />
-      );
-    }
-    
-    if (user.authorities.includes("ROLE_ADMIN")) {
-      cards.push(
-        <DashboardCard
-          key="users"
-          title="Користувачі"
-          description="Керуйте користувачами системи"
-          icon={<Users className="h-6 w-6" />}
-          count={248}
-          linkTo="/users"
-        />,
-        <DashboardCard
-          key="settings"
-          title="Налаштування"
-          description="Змініть налаштування системи"
-          icon={<BookOpen className="h-6 w-6" />}
-          linkTo="/settings"
-        />
-      );
+    // Add null/undefined check for user.authorities before checking roles
+    if (user.authorities) {
+      if (user.authorities.includes("ROLE_STUDENT")) {
+        cards.push(
+          <DashboardCard
+            key="theses"
+            title="Доступні теми"
+            description="Перегляньте доступні бакалаврські теми"
+            icon={<BookOpen className="h-6 w-6" />}
+            count={42}
+            linkTo="/theses"
+          />
+        );
+      }
+      
+      if (user.authorities.includes("ROLE_SUPERVISOR")) {
+        cards.push(
+          <DashboardCard
+            key="my-theses"
+            title="Мої теми"
+            description="Керуйте темами, які ви запропонували"
+            icon={<BookOpen className="h-6 w-6" />}
+            count={7}
+            linkTo="/my-theses"
+          />,
+          <DashboardCard
+            key="students"
+            title="Мої студенти"
+            description="Перегляньте своїх студентів"
+            icon={<Users className="h-6 w-6" />}
+            count={12}
+            linkTo="/students"
+          />
+        );
+      }
+      
+      if (user.authorities.includes("ROLE_DEPARTMENTHEAD")) {
+        cards.push(
+          <DashboardCard
+            key="all-theses"
+            title="Усі теми"
+            description="Перегляньте та керуйте всіма темами"
+            icon={<BookOpen className="h-6 w-6" />}
+            count={128}
+            linkTo="/all-theses"
+          />,
+          <DashboardCard
+            key="supervisors"
+            title="Викладачі"
+            description="Керуйте викладачами відділення"
+            icon={<Users className="h-6 w-6" />}
+            count={23}
+            linkTo="/supervisors"
+          />
+        );
+      }
+      
+      if (user.authorities.includes("ROLE_ADMIN")) {
+        cards.push(
+          <DashboardCard
+            key="users"
+            title="Користувачі"
+            description="Керуйте користувачами системи"
+            icon={<Users className="h-6 w-6" />}
+            count={248}
+            linkTo="/users"
+          />,
+          <DashboardCard
+            key="settings"
+            title="Налаштування"
+            description="Змініть налаштування системи"
+            icon={<BookOpen className="h-6 w-6" />}
+            linkTo="/settings"
+          />
+        );
+      }
     }
     
     // Always show profile card
