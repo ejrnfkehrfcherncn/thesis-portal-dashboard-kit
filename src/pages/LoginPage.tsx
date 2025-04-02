@@ -6,10 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { ChevronRight } from "lucide-react";
+import { Award } from "lucide-react";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -18,7 +18,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) {
+    if (!username || !password) {
       setError("Будь ласка, заповніть усі поля");
       return;
     }
@@ -27,7 +27,7 @@ const LoginPage = () => {
     setIsSubmitting(true);
 
     try {
-      await login(email, password);
+      await login(username, password);
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
@@ -39,73 +39,94 @@ const LoginPage = () => {
     }
   };
 
+  const handleDemoLogin = (role: string) => {
+    setUsername(`${role}`);
+    setPassword("password");
+  };
+
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center px-4 bg-gradient-to-b from-academy-50 to-white">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Thesis Portal</h1>
-          <p className="text-gray-600">Система керування бакалаврськими темами</p>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Вхід у систему</CardTitle>
-            <CardDescription>
-              Введіть ваші дані для входу
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="your@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Пароль</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-
-              {error && (
-                <Alert variant="destructive">
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
-
-              <Button
-                type="submit"
-                className="w-full bg-academy-600 hover:bg-academy-700"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Вхід..." : "Увійти"}
-                <ChevronRight className="ml-2 h-4 w-4" />
-              </Button>
-            </form>
-          </CardContent>
-          <CardFooter className="flex flex-col">
-            <div className="text-sm text-muted-foreground text-center">
-              Використайте для тестування:
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-academy-100">
+            <Award className="h-8 w-8 text-academy-600" />
+          </div>
+          <CardTitle className="mt-4 text-2xl font-bold">DiplomaDistributor</CardTitle>
+          <CardDescription>Sign in to access the thesis distribution system</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-1">
+              <Label htmlFor="username">Username</Label>
+              <Input
+                id="username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="username"
+                required
+              />
             </div>
-            <div className="grid grid-cols-2 gap-2 mt-2 text-xs text-muted-foreground">
-              <div>student@example.com</div>
-              <div>supervisor@example.com</div>
-              <div>head@example.com</div>
-              <div>admin@example.com</div>
-              <div className="col-span-2 text-center">Пароль: password</div>
+            
+            <div className="space-y-1">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+              />
             </div>
-          </CardFooter>
-        </Card>
-      </div>
+            
+            {error && (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            
+            <Button type="submit" className="w-full bg-academy-600 hover:bg-academy-700" disabled={isSubmitting}>
+              {isSubmitting ? 'Signing in...' : 'Sign in'}
+            </Button>
+          </form>
+        </CardContent>
+        <CardFooter className="flex flex-col space-y-4">
+          <div className="text-sm text-center text-gray-500">
+            For demonstration purposes, click a role to pre-fill
+          </div>
+          <div className="flex justify-center space-x-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => handleDemoLogin('student')}
+            >
+              Student
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => handleDemoLogin('supervisor')}
+            >
+              Supervisor
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => handleDemoLogin('head')}
+            >
+              Dept. Head
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => handleDemoLogin('admin')}
+            >
+              Admin
+            </Button>
+          </div>
+        </CardFooter>
+      </Card>
     </div>
   );
 };

@@ -4,7 +4,7 @@ export type UserRole = "Student" | "Supervisor" | "DepartmentHead" | "Admin";
 export interface User {
   id: string;
   name: string;
-  email: string;
+  username: string;
   role: UserRole;
   avatar?: string;
 }
@@ -15,6 +15,6 @@ export interface AuthResponse {
 }
 
 export interface LoginCredentials {
-  email: string;
+  username: string;
   password: string;
 }
