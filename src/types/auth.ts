@@ -1,11 +1,11 @@
 
-export type UserRole = "Student" | "Supervisor" | "DepartmentHead" | "Admin";
+export type UserRole = "ROLE_STUDENT" | "ROLE_SUPERVISOR" | "ROLE_DEPARTMENTHEAD" | "ROLE_ADMIN";
 
 export interface User {
   id: string;
   name: string;
   username: string;
-  role: UserRole;
+  authorities: UserRole[];
   avatar?: string;
 }
 

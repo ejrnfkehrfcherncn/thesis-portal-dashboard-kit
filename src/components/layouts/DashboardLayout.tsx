@@ -18,33 +18,47 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
-// Navigation based on user role
-const getNavigation = (role: UserRole) => {
+// Get navigation items based on user authorities
+const getNavigation = (authorities: UserRole[]) => {
   const common = [
     { name: "Головна", href: "/dashboard", icon: Home },
     { name: "Профіль", href: "/profile", icon: User },
   ];
 
-  // Role-specific navigation
-  const roleSpecific = {
-    Student: [
+  let roleSpecificItems: Array<{ name: string; href: string; icon: any }> = [];
+
+  if (authorities.includes("ROLE_STUDENT")) {
+    roleSpecificItems = [
+      ...roleSpecificItems,
       { name: "Теми", href: "/theses", icon: BookOpen },
-    ],
-    Supervisor: [
+    ];
+  }
+
+  if (authorities.includes("ROLE_SUPERVISOR")) {
+    roleSpecificItems = [
+      ...roleSpecificItems,
       { name: "Мої студенти", href: "/students", icon: Users },
       { name: "Мої теми", href: "/my-theses", icon: BookOpen },
-    ],
-    DepartmentHead: [
+    ];
+  }
+
+  if (authorities.includes("ROLE_DEPARTMENTHEAD")) {
+    roleSpecificItems = [
+      ...roleSpecificItems,
       { name: "Викладачі", href: "/supervisors", icon: Users },
       { name: "Усі теми", href: "/all-theses", icon: BookOpen },
-    ],
-    Admin: [
+    ];
+  }
+
+  if (authorities.includes("ROLE_ADMIN")) {
+    roleSpecificItems = [
+      ...roleSpecificItems,
       { name: "Користувачі", href: "/users", icon: Users },
       { name: "Налаштування", href: "/settings", icon: Settings },
-    ],
-  };
+    ];
+  }
 
-  return [...common, ...roleSpecific[role]];
+  return [...common, ...roleSpecificItems];
 };
 
 interface DashboardLayoutProps {
@@ -58,7 +72,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
   if (!user) return null;
 
-  const navigation = getNavigation(user.role);
+  const navigation = getNavigation(user.authorities);
   
   const handleLogout = async () => {
     await logout();

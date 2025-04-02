@@ -1,35 +1,34 @@
-
 import { ApiService } from "./interfaces/apiService";
 import { AuthResponse, LoginCredentials, User, UserRole } from "@/types/auth";
 
-// Mock users for each role
+// Mock users with arrays of authorities
 const mockUsers: Record<string, User> = {
   "student": {
     id: "1",
     name: "Іван Студентський",
     username: "student",
-    role: "Student",
+    authorities: ["ROLE_STUDENT"],
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=student"
   },
   "supervisor": {
     id: "2",
     name: "Петро Викладач",
     username: "supervisor",
-    role: "Supervisor",
+    authorities: ["ROLE_SUPERVISOR"],
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=supervisor"
   },
   "head": {
     id: "3",
     name: "Ольга Завідувач",
     username: "head",
-    role: "DepartmentHead",
+    authorities: ["ROLE_DEPARTMENTHEAD"],
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=head"
   },
   "admin": {
     id: "4",
     name: "Марія Адмін",
     username: "admin",
-    role: "Admin",
+    authorities: ["ROLE_ADMIN", "ROLE_SUPERVISOR"], // Admin can also act as supervisor
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=admin"
   }
 };

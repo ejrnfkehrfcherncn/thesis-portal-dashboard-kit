@@ -30,8 +30,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   // Check role-based access if allowedRoles is provided
-  if (allowedRoles && user && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/unauthorized" replace />;
+  if (allowedRoles && user) {
+    const hasAllowedRole = user.authorities.some(role => allowedRoles.includes(role));
+    if (!hasAllowedRole) {
+      return <Navigate to="/unauthorized" replace />;
+    }
   }
 
   // User is authenticated and authorized
