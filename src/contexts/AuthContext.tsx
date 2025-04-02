@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { User } from "@/types/auth";
-import { useApi } from "@/hooks/useApi";
+import { useService } from "@/hooks/use-service.ts";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -18,7 +18,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const apiService = useApi();
+  const apiService = useService();
   const navigate = useNavigate();
 
   useEffect(() => {
