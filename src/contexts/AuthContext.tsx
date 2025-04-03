@@ -21,6 +21,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const apiService = useService();
   const navigate = useNavigate();
 
+  // Set navigate function in API service for handling redirects
+  useEffect(() => {
+    if (apiService.setNavigate) {
+      apiService.setNavigate(navigate);
+    }
+  }, [apiService, navigate]);
+
   useEffect(() => {
     // Check if user is already logged in
     const checkAuth = async () => {
@@ -42,7 +49,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const response = await apiService.login({ username, password });
       setUser(response.user);
-      localStorage.setItem("currentUser", JSON.stringify(response.user));
       toast.success("Ласкаво просимо!");
       navigate("/dashboard");
     } catch (error) {

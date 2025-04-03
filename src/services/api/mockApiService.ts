@@ -1,52 +1,59 @@
+
 import { ApiService } from "./interfaces/apiService";
 import { AuthResponse, LoginCredentials, User, UserRole } from "@/types/auth";
+import { getItem, setItem, removeItem, LOCAL_STORAGE_KEYS } from '../localStorage';
 
 // Mock users with arrays of authorities
 const mockUsers: Record<string, User> = {
-  "student": {
+  "xstudent": {
     id: "1",
     name: "Іван Студентський",
-    username: "student",
+    username: "xstudent",
     authorities: ["ROLE_STUDENT"],
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=student"
   },
-  "supervisor": {
+  "xsupervisor": {
     id: "2",
     name: "Петро Викладач",
-    username: "supervisor",
+    username: "xsupervisor",
     authorities: ["ROLE_SUPERVISOR"],
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=supervisor"
   },
-  "head": {
+  "xhead": {
     id: "3",
     name: "Ольга Завідувач",
-    username: "head",
+    username: "xhead",
     authorities: ["ROLE_DEPARTMENTHEAD"],
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=head"
   },
-  "admin": {
+  "xadmin": {
     id: "4",
     name: "Марія Адмін",
-    username: "admin",
+    username: "xadmin",
     authorities: ["ROLE_ADMIN", "ROLE_SUPERVISOR"], // Admin can also act as supervisor
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=admin"
   }
 };
 
-// Mock passwords - in a real app, would be hashed and stored on server
+// Mock passwords
 const mockPasswords: Record<string, string> = {
-  "student": "password",
-  "supervisor": "password",
-  "head": "password",
-  "admin": "password"
+  "xstudent": "pass",
+  "xsupervisor": "pass",
+  "xhead": "pass",
+  "xadmin": "pass"
 };
 
 export class MockApiService implements ApiService {
   private currentUser: User | null = null;
+  private navigateFunction: any = null;
   
   // Simulate network delay
   private delay(ms: number = 500): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  setNavigate(navigate: any): void {
+    this.navigateFunction = navigate;
   }
   
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
@@ -61,7 +68,7 @@ export class MockApiService implements ApiService {
     
     // Save the user in localStorage to persist login state
     this.currentUser = user;
-    localStorage.setItem("currentUser", JSON.stringify(user));
+    setItem(LOCAL_STORAGE_KEYS.CURRENT_USER, user);
     
     return { user };
   }
@@ -69,7 +76,7 @@ export class MockApiService implements ApiService {
   async logout(): Promise<void> {
     await this.delay();
     this.currentUser = null;
-    localStorage.removeItem("currentUser");
+    removeItem(LOCAL_STORAGE_KEYS.CURRENT_USER);
   }
   
   async getCurrentUser(): Promise<User | null> {
@@ -77,9 +84,9 @@ export class MockApiService implements ApiService {
     
     // Try to get the user from memory first, then localStorage
     if (!this.currentUser) {
-      const storedUser = localStorage.getItem("currentUser");
+      const storedUser = getItem<User>(LOCAL_STORAGE_KEYS.CURRENT_USER);
       if (storedUser) {
-        this.currentUser = JSON.parse(storedUser);
+        this.currentUser = storedUser;
       }
     }
     

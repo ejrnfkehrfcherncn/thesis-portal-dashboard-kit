@@ -40,8 +40,8 @@ const LoginPage = () => {
   };
 
   const handleDemoLogin = (role: string) => {
-    setUsername(`${role}`);
-    setPassword("password");
+    setUsername(`x${role}`);
+    setPassword("pass");
   };
 
   return (
