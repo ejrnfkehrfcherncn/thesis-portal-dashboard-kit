@@ -33,14 +33,15 @@ export class HttpApiClient {
     data?: unknown
   ): Promise<T> {
     try {
+
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
-        method,
+        mode: 'cors',
+        method: method,
+        credentials: "include",
         headers: {
-          "Content-Type": "application/json",
-          "Include-Credentials": "true",
+          "Content-Type": "application/json"
         },
-        body: data ? JSON.stringify(data) : undefined,
-        credentials: "include", // Important for cookies
+        body: data ? JSON.stringify(data) : undefined
       });
 
       return await this.handleResponse<T>(response);

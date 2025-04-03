@@ -7,7 +7,7 @@ import RealApiService from "./realApiService";
 export const USE_MOCK_SERVICE = true;
 
 // API base URL for the real service
-const API_BASE_URL = "https://api.thesisportal.example";
+const API_BASE_URL = "http://localhost:8080/api";
 
 export function createApiService(): ApiService {
   if (USE_MOCK_SERVICE) {

@@ -42,6 +42,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const response = await apiService.login({ username, password });
       setUser(response.user);
+      localStorage.setItem("currentUser", JSON.stringify(response.user));
       toast.success("Ласкаво просимо!");
       navigate("/dashboard");
     } catch (error) {
