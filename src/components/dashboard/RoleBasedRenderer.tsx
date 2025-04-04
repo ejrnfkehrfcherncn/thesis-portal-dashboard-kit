@@ -3,6 +3,7 @@ import React from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserRole } from "@/types/auth";
 
+// Update the type definition to specify that components accept a user prop
 type RoleBasedRendererProps<T extends string> = {
   componentsMap: Record<T, React.ComponentType<any>>;
   fallback?: React.ReactNode;
